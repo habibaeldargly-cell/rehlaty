@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#fbfcf5"/>
+      <stop offset="1" stop-color="#e3f0df"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#789e7d"/>
+      <stop offset="1" stop-color="#285b40"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="512" height="512" rx="105" fill="url(#bg)"/>
+  <rect x="13" y="13" width="486" height="486" rx="95"
+        fill="none" stroke="#a8c9a5" stroke-width="7"/>
+
+  <!-- Open book -->
+  <path d="M105 155 Q175 125 256 172 Q337 125 407 155
+           L407 225 Q330 195 256 244 Q182 195 105 225Z"
+        fill="url(#green)"/>
+  <path d="M110 153 Q180 130 250 178 L250 226
+           Q175 190 110 213Z" fill="#fffaf0"/>
+  <path d="M402 153 Q332 130 262 178 L262 226
+           Q337 190 402 213Z" fill="#fffaf0"/>
+  <path d="M256 178 L256 244" stroke="#b6d2af" stroke-width="5"/>
+
+  <!-- Flight trail -->
+  <path d="M280 132 Q330 55 390 88" fill="none"
+        stroke="#789e7d" stroke-width="5"
+        stroke-linecap="round" stroke-dasharray="9 12"/>
+
+  <!-- Airplane -->
+  <path d="M385 55 L455 83 L392 99 L375 132
+           L363 128 L369 97 L331 82 L335 72
+           L375 79Z" fill="#315f45"/>
+
+  <!-- Brand name -->
+  <text x="256" y="315" text-anchor="middle"
+        font-size="64" font-weight="bold"
+        font-family="cursive" fill="#285b40">
+    Habiba's
+  </text>
+  <text x="256" y="380" text-anchor="middle"
+        font-size="61" font-weight="bold"
+        font-family="cursive" fill="#527e5c">
+    Journey
+  </text>
+
+  <path d="M145 410 Q256 438 367 410"
+        fill="none" stroke="#9cbd91" stroke-width="7"
+        stroke-linecap="round"/>
+  <path d="M256 461 C225 435 210 465 256 485
+           C302 465 287 435 256 461Z"
+        fill="#789e7d"/>
+</svg>

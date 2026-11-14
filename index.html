@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#dce8dc">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>رحلة حبيبة</title>
+<style>
+    :root {
+  --main-bg: #f7f8f5;
+  --card-bg: #ffffff;
+  --main-text: #35443a;
+  --accent: #78977e;
+  --soft-color: #e5eee3;
+  --border-color: #dce5da;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Tahoma,Arial,sans-serif;
+background: var(--main-bg);
+color: var(--main-text);
+}
+header{
+background: var(--soft-color);
+ padding:28px 15px;
+ text-align:center;
+}
+header h1{margin:0 0 10px;font-size:30px}
+header p{margin:0;color:#617768}
+nav{
+ display:flex;gap:8px;justify-content:center;
+ flex-wrap:wrap;padding:15px;
+ background:white;position:sticky;top:0;z-index:2;
+}
+nav button,.action{
+ border:0;border-radius:20px;padding:10px 16px;
+ background:#e4ece3;color:#365541;cursor:pointer;
+}
+nav button:hover,.action:hover{background:#c9ddca}
+main{max-width:850px;margin:25px auto;padding:0 15px}
+.card{
+ background:white;border-radius:18px;padding:20px;
+ margin-bottom:18px;box-shadow:0 3px 12px #344b3e0c;
+}
+h2{font-size:21px;margin-top:0}
+input,textarea{
+ width:100%;padding:12px;margin:7px 0;
+ border:1px solid #dce5da;border-radius:10px;
+ font:inherit;background:#fff;
+}
+textarea{min-height:100px;resize:vertical}
+.action{background:#78977e;color:white;margin-top:7px}
+.item{
+ display:flex;justify-content:space-between;align-items:center;
+ gap:10px;padding:12px 5px;border-bottom:1px solid #edf0e9;
+}
+.item span{overflow-wrap:anywhere}
+.done{text-decoration:line-through;color:#9aa69b}
+.delete{border:0;background:#f7e7e3;color:#9a5144;
+ padding:7px 10px;border-radius:9px;cursor:pointer}
+.quote{color:#718b73;line-height:1.9}
+footer{text-align:center;padding:25px;color:#829083}
+section{scroll-margin-top:80px}
+/* ألوان الكروت */
+.card {
+  background: var(--card-bg) !important;
+  color: var(--main-text);
+  border-color: var(--border-color) !important;
+}
+
+/* ألوان الأزرار */
+.action,
+nav button {
+  background: var(--accent) !important;
+  color: white !important;
+  border-color: var(--accent) !important;
+}
+
+/* ألوان حقول الكتابة */
+input,
+textarea,
+select {
+  border-color: var(--border-color);
+  color: var(--main-text);
+}
+/* تصميم رحلة حبيبة للموبايل */
+@media (max-width: 600px) {
+
+  body {
+    padding: 10px !important;
+    font-size: 15px;
+  }
+
+  header {
+    padding: 18px 12px !important;
+    border-radius: 18px;
+  }
+
+  h1 {
+    font-size: 25px !important;
+  }
+
+  h2 {
+    font-size: 20px !important;
+  }
+
+  .card {
+    padding: 15px !important;
+    margin-bottom: 14px;
+    border-radius: 16px;
+  }
+
+  button {
+    min-height: 42px;
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  input,
+  textarea,
+  select {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  textarea {
+    min-height: 90px;
+  }
+
+  .color-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+}
+</style>
+</head>
+<body>
+
+<header>
+
+ <h1>🌿 رحلة حبيبة</h1>
+ <p>خطوات صغيرة كل يوم تصنع حياة أجمل</p>
+ <p id="today"></p>
+</header>
+<section class="card" id="creativeSpace">
+  <h2>🎨 مساحة الإبداع</h2>
+  <p>كل فكرة جميلة تبدأ بخاطرة صغيرة 💗</p>
+
+  <input id="ideaTitle" type="text"
+    placeholder="اسم الفكرة">
+
+  <textarea id="ideaDescription"
+    placeholder="اكتبي تفاصيل فكرتك هنا..."></textarea>
+
+  <button class="action" onclick="saveIdea()">
+    💾 احفظي الفكرة
+  </button>
+
+  <h3>💡 أفكاري</h3>
+  <div id="ideasList"></div>
+</section>
+<section class="card" id="studyTimer">
+  <h2>⏳ مؤقت المذاكرة</h2>
+  <h1 id="timerDisplay" style="font-size:45px;text-align:center">
+    25:00
+  </h1>
+  <p style="text-align:center">ركزي، كل دقيقة بتفرق! 💚</p>
+  <div style="text-align:center;margin:15px">
+  <label for="studyDuration">مدة المذاكرة:</label>
+  <select id="studyDuration" onchange="changeDuration()">
+    <option value="15">15 دقيقة</option>
+    <option value="25" selected>25 دقيقة</option>
+    <option value="45">45 دقيقة</option>
+    <option value="60">60 دقيقة</option>
+  </select>
+</div>
+  <div style="display:flex;gap:10px;justify-content:center">
+    <button class="action" onclick="startTimer()">ابدئي</button>
+    <button class="action" onclick="pauseTimer()">إيقاف</button>
+    <button class="action" onclick="resetTimer()">إعادة</button>
+  </div>
+</section>
+<section class="card" id="themePanel">
+  <h2>🎨 اختاري ألوان رحلتك</h2>
+  <p>اختاري اللون اللي يعبّر عنك 💗</p>
+
+  <div class="color-options">
+    <button onclick="changeTheme('#fce4ec','#f8bbd0','#ad5875','#fff0f5')">🌸 وردي</button>
+    <button onclick="changeTheme('#eee5f7','#d8c4ed','#79539a','#f7f0ff')">💜 موف</button>
+    <button onclick="changeTheme('#e1f3fa','#b9e2f2','#397c9b','#effaff')">🩵 سماوي</button>
+    <button onclick="changeTheme('#e4f0e3','#c5dfc3','#557b59','#f2f8f0')">🌿 أخضر</button>
+    <button onclick="changeTheme('#f5eadb','#e7d2b8','#94704c','#fff8ed')">🤎 بيج</button>
+    <button onclick="changeTheme('#e5e5e5','#c8c8c8','#555555','#f5f5f5')">🩶 رمادي</button>
+  </div>
+
+  <p>أو اختاري لونك بنفسك:</p>
+  <input type="color" id="customColor" value="#78977e">
+  <button onclick="applyCustomColor()">اختيار اللون</button>
+</section>
+
+<nav>
+ <button onclick="go('home')">الرئيسية</button>
+ <button onclick="go('tasks')">مهامي</button>
+ <button onclick="go('worship')">عبادتي</button>
+ <button onclick="go('study')">جامعتي</button>
+ <button onclick="go('habits')">عاداتي</button>
+ <button onclick="go('diary')">يومياتي</button>
+</nav>
+
+<main>
+<section id="home" class="card">
+ <h2>أهلًا بيكي في رحلتك 💚</h2>
+ <p class="quote" id="message"></p>
+ <h3>وعد الفجر 🌅</h3>
+ <p>ابدئي يومك بنية طيبة، وصلاة الفجر، وخطوة تقرّبك من أهدافك.</p>
+</section>
+
+<section id="tasks" class="card">
+ <h2>📝 مهامي اليومية</h2>
+ <div class="card" style="background:#edf4eb">
+  <h3>🏆 إنجازاتي اليوم</h3>
+  <p id="progressText">أنجزتِ 0% من مهامك</p>
+  <div style="background:#d5dfd2;border-radius:20px;height:14px;overflow:hidden">
+    <div id="progressBar"
+      style="width:0%;height:100%;background:#78977e;border-radius:20px;transition:width .4s">
+    </div>
+  </div>
+</div>
+ <input id="taskInput" placeholder="اكتبي مهمة جديدة...">
+ <button class="action" onclick="addItem('tasks','taskInput')">إضافة مهمة</button>
+ <div id="tasksList"></div>
+</section>
+
+<section id="worship" class="card">
+ <h2>🤍 عبادتي وصلواتي</h2>
+ <p>اكتبي مواعيد الصلاة التي تريدين متابعتها:</p>
+ <div id="prayerInputs"></div>
+ <button class="action" onclick="savePrayers()">حفظ المواعيد</button>
+ <p id="prayerSaved" class="quote"></p>
+</section>
+
+<section id="study" class="card">
+ <h2>🎓 جامعتي ومذاكرتي</h2>
+ <input id="studyInput" placeholder="محاضرة أو مادة أو تكليف...">
+ <button class="action" onclick="addItem('study','studyInput')">إضافة</button>
+ <div id="studyList"></div>
+</section>
+<section id="calendar" class="card">
+  <h2>📅 تقويمي الشهري</h2>
+  <p>اختاري يومًا واكتبي مواعيدك وخططك.</p>
+
+  <input type="date" id="calendarDate">
+
+  <textarea id="calendarNote"
+    placeholder="محاضرات، مذاكرة، امتحان، أو موعد مهم..."></textarea>
+
+  <button class="action" onclick="saveCalendarNote()">
+    حفظ أحداث اليوم
+  </button>
+
+  <p id="calendarMessage" class="quote"></p>
+  <div id="calendarList"></div>
+</section>
+<section id="habits" class="card">
+ <h2>🌱 عاداتي اليومية</h2>
+ <input id="habitInput" placeholder="عادة أريد الالتزام بها...">
+ <button class="action" onclick="addItem('habits','habitInput')">إضافة عادة</button>
+ <div id="habitsList"></div>
+</section>
+
+<section id="diary" class="card">
+ <h2>📖 يومياتي</h2>
+ <textarea id="diaryText" placeholder="اكتبي أفكارك وأحداث يومك..."></textarea>
+ <button class="action" onclick="saveDiary()">حفظ يومياتي</button>
+ <p id="diarySaved" class="quote"></p>
+</section>
+</main>
+
+<footer>صُنعت بحب في رحلة حبيبة 🌿</footer>
+
+<script>
+const messages=[
+ "كل يوم فرصة جديدة لبداية أجمل.",
+ "لا تستصغري الخطوات الصغيرة، فهي تصنع الفرق.",
+ "ابدئي بما تستطيعين، وسيعينك الله على الباقي.",
+ "أنتِ تبنين حياة تحبينها، خطوة بخطوة.",
+ "اجعلي يومك مليئًا بالخير والإنجاز."
+];
+
+document.getElementById("message").textContent=
+ messages[Math.floor(Math.random()*messages.length)];
+
+document.getElementById("today").textContent=
+ new Date().toLocaleDateString("ar-EG",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
+
+function go(id){
+ document.getElementById(id).scrollIntoView({behavior:"smooth"});
+}
+
+const sections=["tasks","study","habits"];
+
+function getData(key){
+ try{return JSON.parse(localStorage.getItem(key))||[]}
+ catch{return []}
+}
+
+function render(key){
+    if(key==="tasks") updateProgress();
+ const list=document.getElementById(key+"List");
+ list.innerHTML="";
+ function updateProgress(){
+  const tasks=getData("tasks");
+  const total=tasks.length;
+  const done=tasks.filter(t=>t.done).length;
+  const percent=total===0?0:Math.round(done/total*100);
+
+  document.getElementById("progressText").textContent=
+    `أنجزتِ ${percent}% من مهامك (${done}/${total})`;
+
+  document.getElementById("progressBar").style.width=
+    percent+"%";
+}
+ getData(key).forEach((item,index)=>{
+  const div=document.createElement("div");
+  div.className="item";
+  const span=document.createElement("span");
+  span.textContent=item.text;
+  if(item.done)span.className="done";
+  const check=document.createElement("input");
+  check.type="checkbox";
+  check.checked=item.done;
+  check.style.width="auto";
+  check.onchange=()=>toggle(key,index);
+  const del=document.createElement("button");
+  del.className="delete";
+  del.textContent="حذف";
+  del.onclick=()=>remove(key,index);
+  const group=document.createElement("div");
+  group.style.display="flex";
+  group.style.alignItems="center";
+  group.append(check,del);
+  div.append(span,group);
+  list.append(div);
+ });
+}
+
+function addItem(key,inputId){
+ const input=document.getElementById(inputId);
+ const text=input.value.trim();
+ if(!text)return;
+ const data=getData(key);
+ data.push({text,done:false});
+ localStorage.setItem(key,JSON.stringify(data));
+ input.value="";
+ render(key);
+}
+
+function toggle(key,index){
+ const data=getData(key);
+ data[index].done=!data[index].done;
+ localStorage.setItem(key,JSON.stringify(data));
+ render(key);
+}
+
+function remove(key,index){
+ const data=getData(key);
+ data.splice(index,1);
+ localStorage.setItem(key,JSON.stringify(data));
+ render(key);
+}
+
+sections.forEach(render);
+
+const prayers=["الفجر","الظهر","العصر","المغرب","العشاء"];
+const prayerInputs=document.getElementById("prayerInputs");
+
+prayers.forEach(name=>{
+ const label=document.createElement("label");
+ label.textContent=name;
+ const input=document.createElement("input");
+ input.type="time";
+ input.id="prayer_"+name;
+ input.value=JSON.parse(localStorage.getItem("prayers")||"{}")[name]||"";
+ prayerInputs.append(label,input);
+});
+
+function savePrayers(){
+ const data={};
+ prayers.forEach(name=>{
+  data[name]=document.getElementById("prayer_"+name).value;
+ });
+ localStorage.setItem("prayers",JSON.stringify(data));
+ document.getElementById("prayerSaved").textContent="تم حفظ مواعيدك على هذا الجهاز 🤍";
+}
+
+document.getElementById("diaryText").value=
+ localStorage.getItem("diary")||"";
+
+function saveDiary(){
+ localStorage.setItem("diary",document.getElementById("diaryText").value);
+ document.getElementById("diarySaved").textContent="تم حفظ يومياتك بنجاح 🌷";
+}
+function changeTheme(bg, soft, accent, card) {
+  const root = document.documentElement;
+
+  root.style.setProperty("--main-bg", bg);
+  root.style.setProperty("--soft-color", soft);
+  root.style.setProperty("--accent", accent);
+  root.style.setProperty("--card-bg", card);
+  root.style.setProperty("--border-color", soft);
+
+  localStorage.setItem("habibaTheme", JSON.stringify({
+    bg, soft, accent, card
+  }));
+}
+
+function applyCustomColor() {
+  const color = document.getElementById("customColor").value;
+
+  changeTheme(
+    "color-mix(in srgb, " + color + " 10%, white)",
+    "color-mix(in srgb, " + color + " 25%, white)",
+    color,
+    "white"
+  );
+}
+
+const savedTheme = localStorage.getItem("habibaTheme");
+
+if (savedTheme) {
+  const theme = JSON.parse(savedTheme);
+  changeTheme(theme.bg, theme.soft, theme.accent, theme.card);
+}
+let remainingSeconds = 25 * 60;
+let timerInterval = null;
+
+function updateTimerDisplay() {
+  const minutes = Math.floor(remainingSeconds / 60);
+  const seconds = remainingSeconds % 60;
+
+  document.getElementById("timerDisplay").textContent =
+    String(minutes).padStart(2, "0") + ":" +
+    String(seconds).padStart(2, "0");
+}
+
+function startTimer() {
+  if (timerInterval !== null) return;
+
+  timerInterval = setInterval(() => {
+    if (remainingSeconds > 0) {
+      remainingSeconds--;
+      updateTimerDisplay();
+    } else {
+      pauseTimer();
+      alert("أحسنتِ! خلصتِ جلسة المذاكرة 🎉");
+    }
+  }, 1000);
+}
+
+function pauseTimer() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+}
+
+function resetTimer() {
+  pauseTimer();
+  remainingSeconds = 25 * 60;
+  updateTimerDisplay();
+}
+
+updateTimerDisplay();
+</script>
+</body>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js")
+      .then(() => console.log("تم تجهيز العمل دون إنترنت"))
+      .catch(error => console.log("حدث خطأ:", error));
+  });
+}
+function getCalendarData(){
+  try {
+    return JSON.parse(localStorage.getItem("calendarData")) || {};
+  } catch {
+    return {};
+  }
+}
+
+function saveCalendarNote(){
+  const date = document.getElementById("calendarDate").value;
+  const note = document.getElementById("calendarNote").value.trim();
+
+  if(!date || !note){
+    document.getElementById("calendarMessage").textContent =
+      "اختاري اليوم واكتبي تفاصيل الموعد أولاً 🌷";
+    return;
+  }
+
+  const data = getCalendarData();
+
+  if(!data[date]) data[date] = [];
+  data[date].push(note);
+
+  localStorage.setItem("calendarData", JSON.stringify(data));
+
+  document.getElementById("calendarNote").value = "";
+  document.getElementById("calendarMessage").textContent =
+    "تم حفظ موعدك بنجاح 💚";
+
+  showCalendarNotes();
+}
+
+function showCalendarNotes(){
+  const date = document.getElementById("calendarDate").value;
+  const data = getCalendarData();
+  const list = document.getElementById("calendarList");
+
+  list.innerHTML = "";
+
+  (data[date] || []).forEach((note, index) => {
+    const div = document.createElement("div");
+    div.className = "item";
+
+    const span = document.createElement("span");
+    span.textContent = note;
+
+    const del = document.createElement("button");
+    del.className = "delete";
+    del.textContent = "حذف";
+
+    del.onclick = () => {
+      const updated = getCalendarData();
+      updated[date].splice(index, 1);
+
+      if(updated[date].length === 0){
+        delete updated[date];
+      }
+
+      localStorage.setItem("calendarData", JSON.stringify(updated));
+      showCalendarNotes();
+    };
+
+    div.append(span, del);
+    list.append(div);
+  });
+}
+
+document.getElementById("calendarDate")
+  .addEventListener("change", showCalendarNotes);
+  function changeDuration() {
+  pauseTimer();
+
+  const minutes = Number(
+    document.getElementById("studyDuration").value
+  );
+
+  remainingSeconds = minutes * 60;
+  updateTimerDisplay();
+}
+function getIdeas() {
+  return JSON.parse(localStorage.getItem("creativeIdeas") || "[]");
+}
+
+function saveIdea() {
+  const title = document.getElementById("ideaTitle").value.trim();
+  const description = document.getElementById("ideaDescription").value.trim();
+
+  if (!title) {
+    alert("اكتبي اسم الفكرة أولاً 💗");
+    return;
+  }
+
+  const ideas = getIdeas();
+
+  ideas.push({
+    id: Date.now(),
+    title: title,
+    description: description,
+    pinned: false,
+    project: false
+  });
+
+  localStorage.setItem("creativeIdeas", JSON.stringify(ideas));
+
+  document.getElementById("ideaTitle").value = "";
+  document.getElementById("ideaDescription").value = "";
+
+  showIdeas();
+}
+function showIdeas() {
+  const ideas = getIdeas();
+  const list = document.getElementById("ideasList");
+
+  list.innerHTML = "";
+
+  ideas.sort((a, b) => Number(b.pinned) - Number(a.pinned));
+
+  ideas.forEach(idea => {
+    const div = document.createElement("div");
+    div.className = "item";
+
+    const title = document.createElement("h3");
+    title.textContent = (idea.pinned ? "📌 " : "") + idea.title;
+
+    const description = document.createElement("p");
+    description.textContent = idea.description;
+
+    const pin = document.createElement("button");
+    pin.textContent = idea.pinned ? "إلغاء التثبيت" : "📌 تثبيت";
+
+    pin.onclick = () => {
+      const all = getIdeas();
+      const item = all.find(x => x.id === idea.id);
+      item.pinned = !item.pinned;
+      localStorage.setItem("creativeIdeas", JSON.stringify(all));
+      showIdeas();
+    };
+
+    const project = document.createElement("button");
+    project.textContent = idea.project ? "قيد التنفيذ 🚀" : "تحويل لمشروع";
+
+    project.onclick = () => {
+      const all = getIdeas();
+      const item = all.find(x => x.id === idea.id);
+      item.project = !item.project;
+      localStorage.setItem("creativeIdeas", JSON.stringify(all));
+      showIdeas();
+    };
+    const edit = document.createElement("button");
+edit.textContent = "✏️ تعديل";
+
+edit.onclick = () => {
+  const newTitle = prompt("اكتبي اسم الفكرة الجديد:", idea.title);
+
+  if (newTitle === null) return;
+
+  if (newTitle.trim() === "") {
+    alert("لازم تكتبي اسم الفكرة 💗");
+    return;
+  }
+
+  const newDescription = prompt(
+    "عدّلي تفاصيل الفكرة:",
+    idea.description
+  );
+
+  if (newDescription === null) return;
+
+  const all = getIdeas();
+  const item = all.find(x => x.id === idea.id);
+
+  item.title = newTitle.trim();
+  item.description = newDescription.trim();
+
+  localStorage.setItem("creativeIdeas", JSON.stringify(all));
+
+  showIdeas();
+};
+    const del = document.createElement("button");
+    del.textContent = "🗑️ حذف الفكرة";
+    del.className = "delete";
+
+    del.onclick = () => {
+      if (confirm("متأكدة إنك عايزة تحذفي الفكرة؟")) {
+        const all = getIdeas().filter(x => x.id !== idea.id);
+        localStorage.setItem("creativeIdeas", JSON.stringify(all));
+        showIdeas();
+      }
+    };
+   div.append(title, description, pin, edit, project, del);
+    list.append(div);
+  });
+}
+    list.append(div);
+  ;
+
+showIdeas();
+</script>
+</html>
